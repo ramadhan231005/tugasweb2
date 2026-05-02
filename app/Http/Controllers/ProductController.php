@@ -103,17 +103,26 @@ class ProductController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
-    {
-        try {
-            $product = Product::findOrFail($id);
-            $this->productService->deleteProduct($product);
+{
+    try {
+        // 1. Tambahkan pengecekan role di sini
+        if (auth()->user()->role !== 'admin') {
             return response()->json([
-                'message' => 'Data produk berhasil dihapus'
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage()
-            ], 500);
+                'message' => 'Akses Ditolak: Hanya Admin yang boleh menghapus data produk'
+            ], 403); // 403 adalah kode standar untuk "Forbidden"
         }
+
+        // 2. Kode asli Anda tetap berjalan setelah pengecekan di atas lolos
+        $product = Product::findOrFail($id);
+        $this->productService->deleteProduct($product);
+
+        return response()->json([
+            'message' => 'Data produk berhasil dihapus'
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => $e->getMessage()
+        ], 500);
     }
+}
 }

@@ -1,8 +1,11 @@
+<?php
+
 namespace App\Services;
 
 use App\Models\Product;
 use Illuminate\Support\Facades\Log;
 use Exception;
+
 
 class ProductService
 {
